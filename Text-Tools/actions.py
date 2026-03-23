@@ -23,7 +23,6 @@ from aqt.webview import AnkiWebView
 
 from .menu_spec import CommandSpec
 
-
 STYLE_WORD_TO_EDITOR_SIZE = {
     "x-small": 1,
     "small": 2,
@@ -86,7 +85,10 @@ def _editor_set_format(web: AnkiWebView, command: str, value: Any | None = None)
     if value is None:
         js = f"setFormat({json.dumps(command)}); saveNow(1);"
     else:
-        js = f"setFormat({json.dumps(command)}, {json.dumps(value, ensure_ascii=False)}); saveNow(1);"
+        js = (
+            f"setFormat({json.dumps(command)}, "
+            f"{json.dumps(value, ensure_ascii=False)}); saveNow(1);"
+        )
     _editor_eval(web, js)
 
 
@@ -165,8 +167,7 @@ def _normalize_image_source(src: str) -> str:
             return str(add_file(str(path.resolve())))
         except Exception as exc:
             showInfo(
-                "Could not import the local image into your Anki collection.\n\n"
-                f"{path}\n\n{exc}"
+                f"Could not import the local image into your Anki collection.\n\n{path}\n\n{exc}"
             )
             return ""
 
@@ -536,6 +537,7 @@ def dispatch_spec(web: AnkiWebView, spec: CommandSpec, context_name: str) -> Non
         return
 
     if action == "cut":
+
         def after_copy(result: Any) -> None:
             if _set_clipboard_selection(result):
                 _run_js(web, {"op": "deleteSelection"})

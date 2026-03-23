@@ -4,7 +4,6 @@ import argparse
 from pathlib import Path
 from zipfile import ZIP_DEFLATED, ZipFile
 
-
 REPO_ROOT = Path(__file__).resolve().parent.parent
 ADDON_ROOT = REPO_ROOT / "Text-Tools"
 DEFAULT_OUTPUT = REPO_ROOT / "dist" / "Text-Tools.ankiaddon"
