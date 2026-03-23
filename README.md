@@ -6,6 +6,8 @@ An Anki add-on that adds a **Text Tools** menu to the editor **right-click menu*
 - [Japanese README](docs/README_ja.md)
 - [AnkiWeb description draft](docs/ANKIWEB_DESCRIPTION.md)
 - [AnkiWeb description draft (Japanese)](docs/ANKIWEB_DESCRIPTION_ja.md)
+- [Manual test checklist](docs/MANUAL_TEST_CHECKLIST.md)
+- [Manual test checklist (Japanese)](docs/MANUAL_TEST_CHECKLIST_ja.md)
 
 ![Screenshot: editor right-click menu](docs/Screenshot_right-click_menu.png)
 
@@ -57,5 +59,6 @@ This writes `dist/Text-Tools.ankiaddon` and packages the contents of `Text-Tools
 ## Release Flow
 
 1. Run the lint and format commands above.
-2. Build `dist/Text-Tools.ankiaddon`.
-3. Upload the generated `.ankiaddon` file to AnkiWeb manually.
+2. Run through the manual smoke test checklist in `docs/MANUAL_TEST_CHECKLIST.md`.
+3. Build `dist/Text-Tools.ankiaddon`.
+4. Upload the generated `.ankiaddon` file to AnkiWeb manually.

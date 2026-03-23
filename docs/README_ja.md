@@ -6,6 +6,8 @@
 - [English README](../README.md)
 - [AnkiWeb 説明文ドラフト](ANKIWEB_DESCRIPTION_ja.md)
 - [AnkiWeb description draft](ANKIWEB_DESCRIPTION.md)
+- [手動テストチェックリスト](MANUAL_TEST_CHECKLIST_ja.md)
+- [Manual test checklist](MANUAL_TEST_CHECKLIST.md)
 
 ![スクリーンショット: エディタの右クリックメニュー](Screenshot_right-click_menu.png)
 
