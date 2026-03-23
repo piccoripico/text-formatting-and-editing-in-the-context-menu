@@ -356,6 +356,20 @@
     return sel ? sel.toString() : "";
   }
 
+  function getSelectedContent() {
+    const range = getRange();
+    if (!range || range.collapsed) {
+      return { html: "", text: "" };
+    }
+
+    const container = document.createElement("div");
+    container.appendChild(range.cloneContents());
+    return {
+      html: container.innerHTML,
+      text: getSelectedText(),
+    };
+  }
+
   function deleteSelection() {
     const range = getRange();
     if (!range) return false;
@@ -626,6 +640,8 @@
           return selectAll();
         case "getSelectedText":
           return getSelectedText();
+        case "getSelectedContent":
+          return getSelectedContent();
         case "deleteSelection":
           return deleteSelection();
         case "clearFormat":

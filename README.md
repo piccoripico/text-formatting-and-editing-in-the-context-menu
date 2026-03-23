@@ -14,6 +14,7 @@ An Anki add-on that adds a **Text Tools** menu to the editor **right-click menu*
 - **Colors & size:** text color, highlight color, font size presets, font selection dialog
 - **Layout:** text alignment, indent/outdent, ordered/unordered lists
 - **Insert:** links, images, ruby text, tables, date/time, math snippets, blockquotes, horizontal rules, special characters
+  Local image files are imported into Anki's media collection before insertion.
 - **Edit:** cut, copy, paste, paste as plain text, remove link, select all, undo/redo, clear all formatting
 - **Extras:** style presets, word count
 
@@ -49,6 +50,22 @@ The configuration window has three tabs:
 - **User Words** — add, edit, remove, reorder, import, or export your own words and optionally display them at the top level of the right-click menu
 
 ![Screenshot: config window](https://raw.githubusercontent.com/piccoripico/Text-Formatting-and-Editing-in-the-Context-Menu/main/docs/Screenshot_config.png)
+
+## Build
+
+Create a clean `.ankiaddon` package with:
+
+```bash
+py -3 scripts/build_ankiaddon.py
+```
+
+This writes `dist/Text-Tools.ankiaddon` and packages the contents of `Text-Tools/` at the archive root.
+
+The build intentionally excludes generated files such as:
+
+- `__pycache__/`
+- `*.pyc`
+- user-specific files inside `Text-Tools/user_files/` except `README.txt`
 
 ## Changelog
 
