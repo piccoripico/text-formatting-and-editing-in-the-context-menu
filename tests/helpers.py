@@ -201,15 +201,19 @@ def load_addon_module(
     module_basename: str,
     *,
     mw: types.SimpleNamespace | None = None,
+    aqt_overrides: dict | None = None,
     qt_overrides: dict | None = None,
     utils_overrides: dict | None = None,
     webview_overrides: dict | None = None,
+    extra_modules: dict[str, types.ModuleType] | None = None,
 ):
     _install_fake_aqt(
         mw=mw if mw is not None else make_mw(),
+        aqt_overrides=aqt_overrides,
         qt_overrides=qt_overrides,
         utils_overrides=utils_overrides,
         webview_overrides=webview_overrides,
+        extra_modules=extra_modules,
     )
 
     package_name = f"text_tools_testpkg_{uuid.uuid4().hex}"
@@ -259,12 +263,16 @@ def visible_action_labels(menu: FakeMenu) -> list[str]:
 def _install_fake_aqt(
     *,
     mw,
+    aqt_overrides: dict | None = None,
     qt_overrides: dict | None = None,
     utils_overrides: dict | None = None,
     webview_overrides: dict | None = None,
+    extra_modules: dict[str, types.ModuleType] | None = None,
 ) -> None:
     fake_aqt = types.ModuleType("aqt")
     fake_aqt.mw = mw
+    for name, value in (aqt_overrides or {}).items():
+        setattr(fake_aqt, name, value)
 
     fake_qt = types.ModuleType("aqt.qt")
     for name, value in (qt_overrides or {}).items():
@@ -288,6 +296,8 @@ def _install_fake_aqt(
     sys.modules["aqt.qt"] = fake_qt
     sys.modules["aqt.utils"] = fake_utils
     sys.modules["aqt.webview"] = fake_webview
+    for module_name, module in (extra_modules or {}).items():
+        sys.modules[module_name] = module
 
 
 def load_script_module(script_filename: str):
