@@ -21,6 +21,7 @@
 - `Text-Tools/`: 配布される Anki アドオン本体
 - `docs/`: スクリーンショットと GitHub/AnkiWeb 向けドキュメント
 - `scripts/`: `.ankiaddon` 生成などの補助スクリプト
+- `tests/`: 設定移行、メニュー定義、パッケージ生成を確認する自動テスト
 
 実行時のコードは、一般的な `src/` 構成には移していません。`.ankiaddon` ではアドオンの中身がアーカイブ直下に入る必要があるため、`Text-Tools/` をそのまま配布レイアウトに近い形で保つほうが運用しやすいためです。
 
@@ -37,6 +38,12 @@ lint と整形:
 ```bash
 py -3 -m ruff check .
 py -3 -m ruff format .
+```
+
+テスト実行:
+
+```bash
+py -3 -m unittest discover -s tests -v
 ```
 
 配布用 `.ankiaddon` の生成:
