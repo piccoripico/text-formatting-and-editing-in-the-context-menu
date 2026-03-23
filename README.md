@@ -21,7 +21,7 @@ An Anki add-on that adds a **Text Tools** menu to the editor **right-click menu*
 - `Text-Tools/`: the shipped Anki add-on package
 - `docs/`: screenshots plus GitHub and AnkiWeb-facing documentation
 - `scripts/`: release helpers such as `.ankiaddon` packaging
-- `tests/`: automated checks for config migration, menu definitions, and packaging
+- `tests/`: automated checks for config migration, menu definitions, action dispatch, menu building, and packaging
 
 The runtime code intentionally stays in `Text-Tools/` instead of moving to a generic `src/` directory. The release archive needs the add-on files at the archive root, so keeping the package layout close to the shipped structure reduces packaging complexity.
 

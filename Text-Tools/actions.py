@@ -145,12 +145,16 @@ def _path_from_file_uri(src: str) -> Path | None:
     return Path(path_text)
 
 
+def _looks_like_windows_drive_path(src: str) -> bool:
+    return len(src) >= 2 and src[1] == ":" and src[0].isalpha()
+
+
 def _normalize_image_source(src: str) -> str:
     src = src.strip()
     if not src:
         return src
 
-    parsed = urlparse(src)
+    parsed = urlparse(src if not _looks_like_windows_drive_path(src) else "")
     if parsed.scheme and parsed.scheme != "file":
         return src
 
