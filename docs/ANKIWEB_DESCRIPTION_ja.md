@@ -1,5 +1,3 @@
-# Text Tools in Right-Click Menu
-
 エディタの**右クリックメニュー**に **Text Tools** メニューを追加し、よく使う書式設定・挿入・編集コマンドにすばやくアクセスできるようにする Anki アドオンです。
 
 ![スクリーンショット: エディタの右クリックメニュー](https://raw.githubusercontent.com/piccoripico/text-formatting-and-editing-in-the-context-menu/main/docs/Screenshot_right-click_menu.png)
@@ -12,8 +10,6 @@
 - **挿入:** リンク、画像、ルビ、表、日付/時刻、数式スニペット、引用ブロック、水平線、特殊文字
 - **編集:** 切り取り、コピー、貼り付け、プレーンテキストとして貼り付け、リンク削除、すべて選択、元に戻す/やり直し、すべての書式をクリア
 - **その他:** スタイルプリセット、文字数カウント
-
-ローカル画像ファイルは、挿入前に Anki のメディアコレクションへ取り込まれます。
 
 ## オプション
 

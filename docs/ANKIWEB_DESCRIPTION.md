@@ -1,5 +1,3 @@
-# Text Tools in Right-Click Menu
-
 Add a **Text Tools** menu to the editor **right-click menu** so common formatting, insertion, and editing commands are always close at hand.
 
 ![Screenshot: editor right-click menu](https://raw.githubusercontent.com/piccoripico/text-formatting-and-editing-in-the-context-menu/main/docs/Screenshot_right-click_menu.png)
@@ -12,8 +10,6 @@ Add a **Text Tools** menu to the editor **right-click menu** so common formattin
 - **Insert:** links, images, ruby text, tables, date/time, math snippets, blockquotes, horizontal rules, and special characters
 - **Edit:** cut, copy, paste, paste as plain text, remove link, select all, undo/redo, clear all formatting
 - **Extras:** style presets and word count
-
-Local image files are imported into Anki's media collection before insertion.
 
 ## Optional features
 

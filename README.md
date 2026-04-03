@@ -4,10 +4,6 @@ An Anki add-on that adds a **Text Tools** menu to the editor **right-click menu*
 
 - AnkiWeb: https://ankiweb.net/shared/info/2143302836
 - [Japanese README](docs/README_ja.md)
-- [AnkiWeb description draft](docs/ANKIWEB_DESCRIPTION.md)
-- [AnkiWeb description draft (Japanese)](docs/ANKIWEB_DESCRIPTION_ja.md)
-- [Manual test checklist](docs/MANUAL_TEST_CHECKLIST.md)
-- [Manual test checklist (Japanese)](docs/MANUAL_TEST_CHECKLIST_ja.md)
 
 ![Screenshot: editor right-click menu](docs/Screenshot_right-click_menu.png)
 
@@ -25,8 +21,6 @@ An Anki add-on that adds a **Text Tools** menu to the editor **right-click menu*
 - `scripts/`: release helpers such as `.ankiaddon` packaging
 - `tests/`: automated checks for config migration, menu definitions, action dispatch, menu building, and packaging
 - `tests-js/`: DOM-level automated checks for reviewer-side web commands
-
-The runtime code intentionally stays in `Text-Tools/` instead of moving to a generic `src/` directory. The release archive needs the add-on files at the archive root, so keeping the package layout close to the shipped structure reduces packaging complexity.
 
 ## Development
 
