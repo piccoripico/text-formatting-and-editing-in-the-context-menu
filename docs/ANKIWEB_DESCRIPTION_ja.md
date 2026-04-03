@@ -50,7 +50,6 @@
 - 2026-04-04
   - ローカル画像を、そのままローカルパス参照するのではなく、Anki のメディアコレクションに取り込んでから挿入するように改善
   - cut / copy / paste の挙動を改善し、書式を保持しやすくした
-  - User Words のインポート/エクスポートを `.txt` のみに簡素化
 - 2026-03-08
   - アドオンを**全面改訂**
   - アドオン名を **Text Formatting and Editing in the Context Menu** から **Text Tools in Right-Click Menu** に変更
