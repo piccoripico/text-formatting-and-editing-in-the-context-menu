@@ -24,6 +24,7 @@ An Anki add-on that adds a **Text Tools** menu to the editor **right-click menu*
 - `docs/`: screenshots plus GitHub and AnkiWeb-facing documentation
 - `scripts/`: release helpers such as `.ankiaddon` packaging
 - `tests/`: automated checks for config migration, menu definitions, action dispatch, menu building, and packaging
+- `tests-js/`: DOM-level automated checks for reviewer-side web commands
 
 The runtime code intentionally stays in `Text-Tools/` instead of moving to a generic `src/` directory. The release archive needs the add-on files at the archive root, so keeping the package layout close to the shipped structure reduces packaging complexity.
 
@@ -33,6 +34,7 @@ Install Ruff if needed:
 
 ```bash
 py -3 -m pip install ruff
+npm.cmd install
 ```
 
 Run lint and formatting:
@@ -46,6 +48,7 @@ Run tests:
 
 ```bash
 py -3 -m unittest discover -s tests -v
+npm.cmd run test:js
 ```
 
 Build a clean `.ankiaddon` package:

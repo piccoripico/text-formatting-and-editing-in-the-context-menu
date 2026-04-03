@@ -1,6 +1,7 @@
 __pycache__/
 *.py[cod]
 .ruff_cache/
+node_modules/
 dist/
 Text-Tools/user_files/*
 !Text-Tools/user_files/README.txt
