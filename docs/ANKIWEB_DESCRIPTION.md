@@ -2,7 +2,7 @@
 
 Add a **Text Tools** menu to the editor **right-click menu** so common formatting, insertion, and editing commands are always close at hand.
 
-![Screenshot: editor right-click menu](Screenshot_right-click_menu.png)
+![Screenshot: editor right-click menu](https://raw.githubusercontent.com/piccoripico/text-formatting-and-editing-in-the-context-menu/main/docs/Screenshot_right-click_menu.png)
 
 ## Features
 
@@ -43,7 +43,7 @@ The configuration window has three tabs:
 - **Quick Items**: choose frequently used items and optionally display them at the top level of the right-click menu
 - **User Words**: add, edit, remove, reorder, import, or export your own words as plain text and optionally display them at the top level of the right-click menu
 
-![Screenshot: config window](Screenshot_config.png)
+![Screenshot: config window](https://raw.githubusercontent.com/piccoripico/text-formatting-and-editing-in-the-context-menu/main/docs/Screenshot_config.png)
 
 ## Changelog
 

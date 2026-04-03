@@ -62,5 +62,9 @@ py -3 scripts/build_ankiaddon.py
 ## リリース手順
 
 1. 上記の lint / format を実行します。
-2. `dist/Text-Tools.ankiaddon` を生成します。
-3. 生成された `.ankiaddon` を AnkiWeb に手動でアップロードします。
+2. `docs/MANUAL_TEST_CHECKLIST_ja.md` の手動スモークテストを実施します。
+3. `dist/Text-Tools.ankiaddon` を生成します。
+4. `v2.1.0` のようなバージョンタグを push して GitHub Release を自動作成します。
+5. 生成された `.ankiaddon` を AnkiWeb に手動でアップロードします。
+
+`.github/workflows/release.yml` は、タグ push 時に Ruff、Python テスト、DOM テストを実行し、`dist/Text-Tools.ankiaddon` を GitHub Release に添付します。

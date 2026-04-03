@@ -64,4 +64,7 @@ This writes `dist/Text-Tools.ankiaddon` and packages the contents of `Text-Tools
 1. Run the lint and format commands above.
 2. Run through the manual smoke test checklist in `docs/MANUAL_TEST_CHECKLIST.md`.
 3. Build `dist/Text-Tools.ankiaddon`.
-4. Upload the generated `.ankiaddon` file to AnkiWeb manually.
+4. Push a version tag such as `v2.1.0` to create a GitHub release automatically.
+5. Upload the generated `.ankiaddon` file to AnkiWeb manually.
+
+The GitHub Actions workflow at `.github/workflows/release.yml` runs Ruff, Python tests, DOM tests, builds `dist/Text-Tools.ankiaddon`, and attaches that file to the GitHub release for the pushed tag.
