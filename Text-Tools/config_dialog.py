@@ -17,10 +17,10 @@ from aqt.qt import (
     QPushButton,
     QScrollArea,
     QSizePolicy,
+    Qt,
     QTabWidget,
     QVBoxLayout,
     QWidget,
-    Qt,
 )
 
 from .config_store import ADDON_MODULE, load_config, save_config
@@ -114,7 +114,8 @@ class ConfigDialog(QDialog):
 
         self.reviewer_checkbox = QCheckBox(
             "Show 'Text Tools' in the reviewer right-click menu "
-            "(Most features are available when the 'Edit Field During Review (Cloze)' add-on is installed.)"
+            "(Most features are available when the "
+            "'Edit Field During Review (Cloze)' add-on is installed.)"
         )
         self.reviewer_checkbox.setChecked(self.config.get("reviewer", {}).get("enabled", True))
         root.addWidget(self.reviewer_checkbox)
@@ -184,7 +185,9 @@ class ConfigDialog(QDialog):
         insert_layout.addWidget(self._build_group_scroll_area(INSERT_QUICK_ACCESS_GROUPS))
 
         special_layout = QVBoxLayout(special_chars_tab)
-        special_layout.addWidget(self._build_group_scroll_area(SPECIAL_CHARACTER_QUICK_ACCESS_GROUPS))
+        special_layout.addWidget(
+            self._build_group_scroll_area(SPECIAL_CHARACTER_QUICK_ACCESS_GROUPS)
+        )
 
         box_position = QGroupBox("Quick Items Position")
         box_position_layout = QVBoxLayout(box_position)
@@ -192,7 +195,9 @@ class ConfigDialog(QDialog):
         self.quick_access_position_checkbox = QCheckBox(
             "Show the selected Quick Items at the top level of the right-click menu"
         )
-        self.quick_access_position_checkbox.setChecked(self.config.get("quick_access_position", False))
+        self.quick_access_position_checkbox.setChecked(
+            self.config.get("quick_access_position", False)
+        )
         box_position_layout.addWidget(self.quick_access_position_checkbox)
 
         outer.addWidget(box_position)
@@ -214,7 +219,9 @@ class ConfigDialog(QDialog):
         note.setWordWrap(True)
         root.addWidget(note)
 
-        self.words_checkbox = QCheckBox("Show 'User Words' in the right-click menu (using the words listed below)")
+        self.words_checkbox = QCheckBox(
+            "Show 'User Words' in the right-click menu (using the words listed below)"
+        )
         self.words_checkbox.setChecked(self.config.get("user_words_flag", True))
         root.addWidget(self.words_checkbox)
 
@@ -307,12 +314,13 @@ class ConfigDialog(QDialog):
             self,
             "Open File",
             "",
-            "Text Files (*.txt);;CSV Files (*.csv);;All Files (*)",
+            "Text Files (*.txt)",
         )
         if not file_path:
             return
 
-        text = Path(file_path).read_text(encoding="utf-8-sig")
+        path = Path(file_path)
+        text = path.read_text(encoding="utf-8-sig")
         words = [line.strip() for line in text.splitlines() if line.strip()]
 
         self.words_list_widget.clear()
@@ -323,21 +331,26 @@ class ConfigDialog(QDialog):
             self,
             "Save File",
             "user_words.txt",
-            "Text Files (*.txt);;CSV Files (*.csv);;All Files (*)",
+            "Text Files (*.txt)",
         )
         if not file_path:
             return
 
-        words = [self.words_list_widget.item(i).text() for i in range(self.words_list_widget.count())]
-        Path(file_path).write_text("\n".join(words) + ("\n" if words else ""), encoding="utf-8")
+        path = Path(file_path)
+        if path.suffix.lower() != ".txt":
+            path = path.with_suffix(".txt")
+
+        words = [
+            self.words_list_widget.item(i).text() for i in range(self.words_list_widget.count())
+        ]
+        path.write_text("\n".join(words) + ("\n" if words else ""), encoding="utf-8")
 
     def _save_and_close(self) -> None:
         selected_quick_access_items = [
             checkbox.text() for checkbox in self.quick_access_checkboxes if checkbox.isChecked()
         ]
         user_words = [
-            self.words_list_widget.item(i).text()
-            for i in range(self.words_list_widget.count())
+            self.words_list_widget.item(i).text() for i in range(self.words_list_widget.count())
         ]
 
         self.config["editor"]["enabled"] = self.editor_checkbox.isChecked()

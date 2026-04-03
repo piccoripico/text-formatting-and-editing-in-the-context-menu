@@ -1,70 +1,70 @@
 # Text Tools in Right-Click Menu
 
-An Anki add-on that adds a **Text Tools** menu to the editor **right-click menu**, providing quick access to common formatting, insertion, and editing commands.
+An Anki add-on that adds a **Text Tools** menu to the editor **right-click menu**, making common formatting, insertion, and editing commands much easier to reach.
 
-- Available on AnkiWeb: https://ankiweb.net/shared/info/2143302836
-- [GitHub repository](https://github.com/piccoripico/Text-Formatting-and-Editing-in-the-Context-Menu)
-- [Japanese README (日本語)](https://github.com/piccoripico/Text-Formatting-and-Editing-in-the-Context-Menu/blob/main/docs/README_ja.md)
+- AnkiWeb: https://ankiweb.net/shared/info/2143302836
+- [Japanese README](docs/README_ja.md)
+- [AnkiWeb description draft](docs/ANKIWEB_DESCRIPTION.md)
+- [AnkiWeb description draft (Japanese)](docs/ANKIWEB_DESCRIPTION_ja.md)
+- [Manual test checklist](docs/MANUAL_TEST_CHECKLIST.md)
+- [Manual test checklist (Japanese)](docs/MANUAL_TEST_CHECKLIST_ja.md)
 
-![Screenshot: editor right-click menu](https://raw.githubusercontent.com/piccoripico/Text-Formatting-and-Editing-in-the-Context-Menu/main/docs/Screenshot_right-click_menu.png)
+![Screenshot: editor right-click menu](docs/Screenshot_right-click_menu.png)
 
-## Features
+## Highlights
 
-- **Formatting:** bold, italic, underline, strikethrough, small text, superscript, subscript, monospace, inline code
-- **Colors & size:** text color, highlight color, font size presets, font selection dialog
-- **Layout:** text alignment, indent/outdent, ordered/unordered lists
-- **Insert:** links, images, ruby text, tables, date/time, math snippets, blockquotes, horizontal rules, special characters
-- **Edit:** cut, copy, paste, paste as plain text, remove link, select all, undo/redo, clear all formatting
-- **Extras:** style presets, word count
+- Text styling, colors, font sizes, alignment, lists, and clear-format helpers
+- Insert helpers for links, images, ruby text, tables, date/time, math snippets, blockquotes, and special characters
+- Quick Items and User Words for faster access to frequently used actions
+- Reviewer-side support, with broader functionality when [Edit Field During Review (Cloze)](https://ankiweb.net/shared/info/385888438) is installed
 
-### Optional
+## Repository Layout
 
-#### Quick Items
+- `Text-Tools/`: the shipped Anki add-on package
+- `docs/`: screenshots plus GitHub and AnkiWeb-facing documentation
+- `scripts/`: release helpers such as `.ankiaddon` packaging
+- `tests/`: automated checks for config migration, menu definitions, action dispatch, menu building, and packaging
+- `tests-js/`: DOM-level automated checks for reviewer-side web commands
 
-- Select frequently used commands for quicker access.
-- By default, they are shown near the top of the **Text Tools** menu.
-- They can also be displayed at the top level of the right-click menu.
+The runtime code intentionally stays in `Text-Tools/` instead of moving to a generic `src/` directory. The release archive needs the add-on files at the archive root, so keeping the package layout close to the shipped structure reduces packaging complexity.
 
-#### User Words
+## Development
 
-- Register your own words or short snippets and insert them from the **User Words** submenu.
-- They can also be displayed at the top level of the right-click menu.
+Install Ruff if needed:
 
-## Reviewer support
+```bash
+py -3 -m pip install ruff
+npm.cmd install
+```
 
-The add-on can also display **Text Tools** in the reviewer right-click menu. Most reviewer-side features are available when [**Edit Field During Review (Cloze)**](https://ankiweb.net/shared/info/385888438) is installed.
+Run lint and formatting:
 
-Reviewer support was the original motivation behind the development of this add-on.
+```bash
+py -3 -m ruff check .
+py -3 -m ruff format .
+```
 
-## Config
+Run tests:
 
-Open:
+```bash
+py -3 -m unittest discover -s tests -v
+npm.cmd run test:js
+```
 
-> Tools → Add-ons → Text Tools in Right-Click Menu → Config
+Build a clean `.ankiaddon` package:
 
-The configuration window has three tabs:
+```bash
+py -3 scripts/build_ankiaddon.py
+```
 
-- **General** — show **Text Tools** in the editor and/or reviewer right-click menu
-- **Quick Items** — choose frequently used items and optionally display them at the top level of the right-click menu
-- **User Words** — add, edit, remove, reorder, import, or export your own words and optionally display them at the top level of the right-click menu
+This writes `dist/Text-Tools.ankiaddon` and packages the contents of `Text-Tools/` at the archive root while excluding generated files such as `__pycache__/`, `*.pyc`, and user-specific files inside `Text-Tools/user_files/` except `README.txt`.
 
-![Screenshot: config window](https://raw.githubusercontent.com/piccoripico/Text-Formatting-and-Editing-in-the-Context-Menu/main/docs/Screenshot_config.png)
+## Release Flow
 
-## Changelog
+1. Run the lint and format commands above.
+2. Run through the manual smoke test checklist in `docs/MANUAL_TEST_CHECKLIST.md`.
+3. Build `dist/Text-Tools.ankiaddon`.
+4. Push a version tag such as `v2.1.0` to create a GitHub release automatically.
+5. Upload the generated `.ankiaddon` file to AnkiWeb manually.
 
-- 2026-03-08
-  - Full rewrite of the add-on
-  - Renamed the add-on from **Text Formatting and Editing in the Context Menu** to **Text Tools in Right-Click Menu**
-  - Added style presets, ruby insertion, table insertion, and other enhancements
-- 2025-04-15
-  - Fixed an issue that prevented the configuration window from opening
-- 2023-09-03
-  - Added a note about the reviewer context menu to the configuration window (thanks for the feedback)
-- 2023-08-16
-  - Added the User Words feature
-- 2023-07-29
-  - Added an option to display Quick Items at the top level of the context menu
-- 2023-07-27
-  - Added a configuration window (please restart Anki after updating the add-on)
-  - Added the Quick Items feature
-  - Fixed several bugs
+The GitHub Actions workflow at `.github/workflows/release.yml` runs Ruff, Python tests, DOM tests, builds `dist/Text-Tools.ankiaddon`, and attaches that file to the GitHub release for the pushed tag.

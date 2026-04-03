@@ -5,7 +5,7 @@ from aqt.webview import AnkiWebView
 
 from .actions import dispatch_spec, dispatch_user_word
 from .config_store import load_config
-from .menu_spec import COMMANDS, CommandSpec, STYLE_PRESET_SECTIONS
+from .menu_spec import COMMANDS, STYLE_PRESET_SECTIONS, CommandSpec
 
 
 def _add_action(menu: QMenu, label: str, callback) -> None:
@@ -33,9 +33,13 @@ def _add_spec_action(menu: QMenu, web: AnkiWebView, spec: CommandSpec, context_n
     )
 
 
-def _submenu_specs(context_name: str, category: str, submenu_path: tuple[str, ...] = ()) -> list[CommandSpec]:
+def _submenu_specs(
+    context_name: str, category: str, submenu_path: tuple[str, ...] = ()
+) -> list[CommandSpec]:
     specs = _specs_for_context(context_name)
-    return [spec for spec in specs if spec.category == category and spec.submenu_path == submenu_path]
+    return [
+        spec for spec in specs if spec.category == category and spec.submenu_path == submenu_path
+    ]
 
 
 def _category_specs(context_name: str, category: str) -> list[CommandSpec]:
@@ -62,14 +66,18 @@ def _get_or_create_submenu(parent: QMenu, title: str) -> QMenu:
     return parent.addMenu(title)
 
 
-def _add_spec_into_menu_tree(parent: QMenu, spec: CommandSpec, web: AnkiWebView, context_name: str) -> None:
+def _add_spec_into_menu_tree(
+    parent: QMenu, spec: CommandSpec, web: AnkiWebView, context_name: str
+) -> None:
     current_menu = parent
     for title in spec.submenu_path:
         current_menu = _get_or_create_submenu(current_menu, title)
     _add_spec_action(current_menu, web, spec, context_name)
 
 
-def _add_user_words_first_level(config: dict, parent_menu: QMenu, web: AnkiWebView, context_name: str) -> bool:
+def _add_user_words_first_level(
+    config: dict, parent_menu: QMenu, web: AnkiWebView, context_name: str
+) -> bool:
     if not config.get("user_words_flag", False):
         return False
 
@@ -89,7 +97,9 @@ def _add_user_words_first_level(config: dict, parent_menu: QMenu, web: AnkiWebVi
     return True
 
 
-def _add_user_words_submenu(config: dict, root_menu: QMenu, web: AnkiWebView, context_name: str) -> bool:
+def _add_user_words_submenu(
+    config: dict, root_menu: QMenu, web: AnkiWebView, context_name: str
+) -> bool:
     if not config.get("user_words_flag", False):
         return False
 

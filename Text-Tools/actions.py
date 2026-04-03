@@ -5,8 +5,9 @@ import json
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Callable
-from urllib.parse import urlparse
+from urllib.parse import unquote, urlparse
 
+from aqt import mw
 from aqt.qt import (
     QApplication,
     QDialog,
@@ -15,12 +16,12 @@ from aqt.qt import (
     QFormLayout,
     QInputDialog,
     QLineEdit,
+    QMimeData,
 )
 from aqt.utils import showInfo
 from aqt.webview import AnkiWebView
 
 from .menu_spec import CommandSpec
-
 
 STYLE_WORD_TO_EDITOR_SIZE = {
     "x-small": 1,
@@ -84,7 +85,10 @@ def _editor_set_format(web: AnkiWebView, command: str, value: Any | None = None)
     if value is None:
         js = f"setFormat({json.dumps(command)}); saveNow(1);"
     else:
-        js = f"setFormat({json.dumps(command)}, {json.dumps(value, ensure_ascii=False)}); saveNow(1);"
+        js = (
+            f"setFormat({json.dumps(command)}, "
+            f"{json.dumps(value, ensure_ascii=False)}); saveNow(1);"
+        )
     _editor_eval(web, js)
 
 
@@ -100,21 +104,76 @@ def _insert_html_editor_native(web: AnkiWebView, raw_html: str) -> None:
     _editor_set_format(web, "inserthtml", raw_html)
 
 
+def _set_clipboard_selection(result: Any) -> bool:
+    html_data = ""
+    text_data = ""
+
+    if isinstance(result, dict):
+        html_data = str(result.get("html") or "")
+        text_data = str(result.get("text") or "")
+    else:
+        text_data = str(result or "")
+
+    if not html_data and not text_data:
+        return False
+
+    clipboard = QApplication.clipboard()
+    if html_data:
+        mime = QMimeData()
+        mime.setHtml(html_data)
+        mime.setText(text_data)
+        clipboard.setMimeData(mime)
+    else:
+        clipboard.setText(text_data)
+
+    return True
+
+
+def _path_from_file_uri(src: str) -> Path | None:
+    parsed = urlparse(src)
+    if parsed.scheme != "file":
+        return None
+
+    if parsed.netloc:
+        path_text = f"//{parsed.netloc}{unquote(parsed.path)}"
+    else:
+        path_text = unquote(parsed.path)
+
+    if path_text.startswith("/") and len(path_text) > 2 and path_text[2] == ":":
+        path_text = path_text[1:]
+
+    return Path(path_text)
+
+
+def _looks_like_windows_drive_path(src: str) -> bool:
+    return len(src) >= 2 and src[1] == ":" and src[0].isalpha()
+
+
 def _normalize_image_source(src: str) -> str:
     src = src.strip()
     if not src:
         return src
 
-    parsed = urlparse(src)
-    if parsed.scheme:
+    parsed = urlparse(src if not _looks_like_windows_drive_path(src) else "")
+    if parsed.scheme and parsed.scheme != "file":
         return src
 
-    path = Path(src).expanduser()
+    path = _path_from_file_uri(src) if parsed.scheme == "file" else Path(src).expanduser()
+    if path is None:
+        return src
+
     if path.exists():
         try:
-            return path.resolve().as_uri()
-        except Exception:
-            return src
+            media = getattr(getattr(mw, "col", None), "media", None)
+            add_file = getattr(media, "add_file", None) or getattr(media, "addFile", None)
+            if not callable(add_file):
+                raise RuntimeError("This Anki version does not provide a media import API.")
+            return str(add_file(str(path.resolve())))
+        except Exception as exc:
+            showInfo(
+                f"Could not import the local image into your Anki collection.\n\n{path}\n\n{exc}"
+            )
+            return ""
 
     return src
 
@@ -285,7 +344,8 @@ def _dispatch_editor_native(web: AnkiWebView, spec: CommandSpec) -> bool:
         url, ok = QInputDialog.getText(None, "Insert Image", "Image URL or path:")
         if ok and url.strip():
             src = _normalize_image_source(url)
-            _insert_html_editor_native(web, f'<img src="{html.escape(src, quote=True)}">')
+            if src:
+                _insert_html_editor_native(web, f'<img src="{html.escape(src, quote=True)}">')
         return True
 
     if action == "font_dialog":
@@ -318,8 +378,8 @@ def _dispatch_editor_native(web: AnkiWebView, spec: CommandSpec) -> bool:
     if action == "copy":
         _run_js(
             web,
-            {"op": "getSelectedText"},
-            lambda result: QApplication.clipboard().setText(result or ""),
+            {"op": "getSelectedContent"},
+            _set_clipboard_selection,
         )
         return True
 
@@ -456,7 +516,9 @@ def dispatch_spec(web: AnkiWebView, spec: CommandSpec, context_name: str) -> Non
     if action == "insert_image_prompt":
         url, ok = QInputDialog.getText(None, "Insert Image", "Image URL or path:")
         if ok and url.strip():
-            _run_js(web, {"op": "insertImage", "url": _normalize_image_source(url)})
+            src = _normalize_image_source(url)
+            if src:
+                _run_js(web, {"op": "insertImage", "url": src})
         return
 
     if action == "word_count":
@@ -473,17 +535,18 @@ def dispatch_spec(web: AnkiWebView, spec: CommandSpec, context_name: str) -> Non
     if action == "copy":
         _run_js(
             web,
-            {"op": "getSelectedText"},
-            lambda result: QApplication.clipboard().setText(result or ""),
+            {"op": "getSelectedContent"},
+            _set_clipboard_selection,
         )
         return
 
     if action == "cut":
-        def after_copy(result: Any) -> None:
-            QApplication.clipboard().setText(result or "")
-            _run_js(web, {"op": "deleteSelection"})
 
-        _run_js(web, {"op": "getSelectedText"}, after_copy)
+        def after_copy(result: Any) -> None:
+            if _set_clipboard_selection(result):
+                _run_js(web, {"op": "deleteSelection"})
+
+        _run_js(web, {"op": "getSelectedContent"}, after_copy)
         return
 
     if action == "paste":
