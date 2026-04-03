@@ -201,6 +201,7 @@ def load_addon_module(
     module_basename: str,
     *,
     mw: types.SimpleNamespace | None = None,
+    package_name: str | None = None,
     aqt_overrides: dict | None = None,
     qt_overrides: dict | None = None,
     utils_overrides: dict | None = None,
@@ -216,7 +217,7 @@ def load_addon_module(
         extra_modules=extra_modules,
     )
 
-    package_name = f"text_tools_testpkg_{uuid.uuid4().hex}"
+    package_name = package_name or f"text_tools_testpkg_{uuid.uuid4().hex}"
     package = types.ModuleType(package_name)
     package.__path__ = [str(ADDON_ROOT)]
     package.__file__ = str(ADDON_ROOT / "__init__.py")
