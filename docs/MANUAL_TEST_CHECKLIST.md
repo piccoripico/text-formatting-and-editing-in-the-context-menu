@@ -48,10 +48,8 @@ Use this checklist before uploading a new `.ankiaddon` release to AnkiWeb.
 
 1. Open the `User Words` tab in the config dialog.
 2. Export the current list to `.txt`.
-3. Export the current list to `.csv`.
-4. Clear the list and import the `.txt` file.
-5. Clear the list again and import the `.csv` file.
-6. Confirm order and values round-trip as expected, including words containing commas.
+3. Clear the list and import the `.txt` file.
+4. Confirm order and values round-trip as expected, including words containing commas.
 
 ## Release Sanity Check
 

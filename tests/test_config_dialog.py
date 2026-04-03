@@ -246,42 +246,39 @@ class ConfigDialogTests(unittest.TestCase):
 
         self.assertEqual(dialog.words_list_widget.texts(), ["Alpha", "Beta", "Gamma"])
 
-    def test_import_words_reads_csv_files(self) -> None:
-        module = self._load_module()
-        dialog = self._make_dialog(module)
-
-        with tempfile.TemporaryDirectory() as tmp_dir:
-            path = Path(tmp_dir) / "words.csv"
-            path.write_text('Alpha\n"Beta,Gamma"\n\nDelta\n', encoding="utf-8")
-
-            with mock.patch.object(
-                module.QFileDialog, "getOpenFileName", return_value=(str(path), "")
-            ):
-                dialog._import_words()
-
-        self.assertEqual(dialog.words_list_widget.texts(), ["Alpha", "Beta,Gamma", "Delta"])
-
-    def test_export_words_writes_text_and_csv_files(self) -> None:
+    def test_export_words_writes_text_file(self) -> None:
         module = self._load_module()
         dialog = self._make_dialog(module)
         dialog.words_list_widget = FakeListWidget(["Alpha", "Beta,Gamma"])
 
         with tempfile.TemporaryDirectory() as tmp_dir:
             text_path = Path(tmp_dir) / "words.txt"
-            csv_path = Path(tmp_dir) / "words.csv"
 
             with mock.patch.object(
                 module.QFileDialog, "getSaveFileName", return_value=(str(text_path), "")
             ):
                 dialog._export_words()
 
+            self.assertEqual(text_path.read_text(encoding="utf-8"), "Alpha\nBeta,Gamma\n")
+
+    def test_export_words_adds_txt_extension_when_missing(self) -> None:
+        module = self._load_module()
+        dialog = self._make_dialog(module)
+        dialog.words_list_widget = FakeListWidget(["Alpha", "Beta"])
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            path_without_suffix = Path(tmp_dir) / "user_words"
+
             with mock.patch.object(
-                module.QFileDialog, "getSaveFileName", return_value=(str(csv_path), "")
+                module.QFileDialog,
+                "getSaveFileName",
+                return_value=(str(path_without_suffix), ""),
             ):
                 dialog._export_words()
 
-            self.assertEqual(text_path.read_text(encoding="utf-8"), "Alpha\nBeta,Gamma\n")
-            self.assertEqual(csv_path.read_text(encoding="utf-8"), 'Alpha\n"Beta,Gamma"\n')
+            exported_path = path_without_suffix.with_suffix(".txt")
+            self.assertTrue(exported_path.exists())
+            self.assertEqual(exported_path.read_text(encoding="utf-8"), "Alpha\nBeta\n")
 
     def test_save_and_close_updates_config_and_persists_it(self) -> None:
         module = self._load_module()

@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import csv
 from pathlib import Path
 
 from aqt import mw
@@ -315,25 +314,14 @@ class ConfigDialog(QDialog):
             self,
             "Open File",
             "",
-            "Text Files (*.txt);;CSV Files (*.csv);;All Files (*)",
+            "Text Files (*.txt)",
         )
         if not file_path:
             return
 
         path = Path(file_path)
-        if path.suffix.lower() == ".csv":
-            words: list[str] = []
-            with path.open("r", encoding="utf-8-sig", newline="") as handle:
-                reader = csv.reader(handle)
-                for row in reader:
-                    if not row:
-                        continue
-                    word = ",".join(row).strip()
-                    if word:
-                        words.append(word)
-        else:
-            text = path.read_text(encoding="utf-8-sig")
-            words = [line.strip() for line in text.splitlines() if line.strip()]
+        text = path.read_text(encoding="utf-8-sig")
+        words = [line.strip() for line in text.splitlines() if line.strip()]
 
         self.words_list_widget.clear()
         self.words_list_widget.addItems(words)
@@ -343,22 +331,19 @@ class ConfigDialog(QDialog):
             self,
             "Save File",
             "user_words.txt",
-            "Text Files (*.txt);;CSV Files (*.csv);;All Files (*)",
+            "Text Files (*.txt)",
         )
         if not file_path:
             return
 
         path = Path(file_path)
+        if path.suffix.lower() != ".txt":
+            path = path.with_suffix(".txt")
+
         words = [
             self.words_list_widget.item(i).text() for i in range(self.words_list_widget.count())
         ]
-        if path.suffix.lower() == ".csv":
-            with path.open("w", encoding="utf-8", newline="") as handle:
-                writer = csv.writer(handle)
-                for word in words:
-                    writer.writerow([word])
-        else:
-            path.write_text("\n".join(words) + ("\n" if words else ""), encoding="utf-8")
+        path.write_text("\n".join(words) + ("\n" if words else ""), encoding="utf-8")
 
     def _save_and_close(self) -> None:
         selected_quick_access_items = [

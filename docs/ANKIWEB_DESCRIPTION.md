@@ -35,12 +35,34 @@ The add-on can also show **Text Tools** in the reviewer right-click menu. Most r
 
 Open:
 
-> Tools → Add-ons → Text Tools in Right-Click Menu → Config
+> Tools -> Add-ons -> Text Tools in Right-Click Menu -> Config
 
 The configuration window has three tabs:
 
 - **General**: show **Text Tools** in the editor and/or reviewer right-click menu
 - **Quick Items**: choose frequently used items and optionally display them at the top level of the right-click menu
-- **User Words**: add, edit, remove, reorder, import, or export your own words and optionally display them at the top level of the right-click menu
+- **User Words**: add, edit, remove, reorder, import, or export your own words as plain text and optionally display them at the top level of the right-click menu
 
 ![Screenshot: config window](Screenshot_config.png)
+
+## Changelog
+
+- 2026-04-04
+  - Improved local image insertion by importing local files into Anki's media collection before insertion
+  - Improved cut, copy, and paste behavior
+- 2026-03-08
+  - **Rewrote** the add-on **from the ground up**
+  - Renamed the add-on from **Text Formatting and Editing in the Context Menu** to **Text Tools in Right-Click Menu**
+  - Added style presets, ruby insertion, table insertion, and other improvements
+- 2025-04-15
+  - Fixed an issue that prevented the configuration window from opening
+- 2023-09-03
+  - Added a note about the reviewer context menu to the configuration window
+- 2023-08-16
+  - Added the User Words feature
+- 2023-07-29
+  - Added an option to display Quick Items at the top level of the right-click menu
+- 2023-07-27
+  - Added a configuration window
+  - Added the Quick Items feature
+  - Fixed several bugs
