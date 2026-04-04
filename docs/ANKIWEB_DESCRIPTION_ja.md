@@ -1,5 +1,7 @@
 エディタの**右クリックメニュー**に **Text Tools** メニューを追加し、よく使う書式設定・挿入・編集コマンドにすばやくアクセスできるようにする Anki アドオンです。
 
+- [英語の説明文 (English)](https://github.com/piccoripico/text-formatting-and-editing-in-the-context-menu/blob/main/docs/ANKIWEB_DESCRIPTION.md)
+
 ![スクリーンショット: エディタの右クリックメニュー](https://raw.githubusercontent.com/piccoripico/text-formatting-and-editing-in-the-context-menu/main/docs/Screenshot_right-click_menu.png)
 
 ## 機能
@@ -62,3 +64,5 @@
   - 設定ウィンドウを追加
   - Quick Items 機能を追加
   - いくつかのバグを修正
+- 2023-03-19
+  - 新規公開

@@ -1,5 +1,7 @@
 Add a **Text Tools** menu to the editor **right-click menu** so common formatting, insertion, and editing commands are always close at hand.
 
+- [Japanese description (日本語)](https://github.com/piccoripico/text-formatting-and-editing-in-the-context-menu/blob/main/docs/ANKIWEB_DESCRIPTION_ja.md)
+
 ![Screenshot: editor right-click menu](https://raw.githubusercontent.com/piccoripico/text-formatting-and-editing-in-the-context-menu/main/docs/Screenshot_right-click_menu.png)
 
 ## Features
@@ -62,3 +64,5 @@ The configuration window has three tabs:
   - Added a configuration window
   - Added the Quick Items feature
   - Fixed several bugs
+- 2023-03-19
+  - Initial release
